@@ -9,115 +9,103 @@
 </head>
 <body>
   <main class="popup">
-    <header class="hero">
-      <div class="hero__copy">
-        <p class="hero__eyebrow">Second Brain Extension</p>
-        <h1 class="hero__title">Capture pages, links, and files in one place.</h1>
-        <p class="hero__subtitle">
-          Save the current tab, paste any other link, or upload a PDF/image without leaving your browser.
+    <div class="container">
+      <header class="header">
+        <div class="brand">
+          <div class="brand__icon"></div>
+          <div class="brand__text">
+            <p class="brand__eyebrow">Second Brain Assistant</p>
+            <h1 class="brand__title">Knowledge Archive</h1>
+          </div>
+        </div>
+        <button id="sessionActionButton" class="btn btn--action" type="button">
+          Open Library
+        </button>
+      </header>
+
+      <div class="scroll-area">
+        <!-- SESSION STATUS -->
+        <section class="section section--session">
+          <div class="section__header">
+            <h2 id="sessionTitle" class="section__label">Connecting...</h2>
+            <span id="sessionBadge" class="badge" data-state="loading">Checking</span>
+          </div>
+          <p id="sessionDescription" class="section__meta">
+            Verifying your secure session with the cloud.
+          </p>
+        </section>
+
+        <!-- AUTO-CAPTURE (ACTIVE TAB) -->
+        <section class="section">
+          <div class="section__header">
+            <h2 class="section__title">Capture Moment</h2>
+          </div>
+          <div class="card card--preview">
+            <h3 id="activePageTitle" class="card__title">Loading active tab...</h3>
+            <p id="activePageUrl" class="card__url">Checking current context...</p>
+          </div>
+          <button id="saveCurrentPageButton" class="btn btn--primary" type="button">
+            Save Current Tab
+          </button>
+        </section>
+
+        <div class="divider"><span>OR</span></div>
+
+        <!-- MANUAL INPUT (LINK) -->
+        <section class="section">
+          <div class="section__header">
+            <h2 class="section__title">Save External Link</h2>
+          </div>
+          <form id="linkForm" class="form">
+            <div class="input-group">
+              <input
+                id="linkInput"
+                class="input-field"
+                type="url"
+                placeholder="https://example.com/article"
+                autocomplete="off"
+              >
+            </div>
+            <button id="saveLinkButton" class="btn btn--secondary" type="submit">
+              Archive Link
+            </button>
+          </form>
+        </section>
+
+        <!-- UPLOAD (FILES) -->
+        <section class="section">
+          <div class="section__header">
+            <h2 class="section__title">Upload Artifact</h2>
+          </div>
+          <form id="uploadForm" class="form">
+            <label class="dropzone" for="fileInput">
+              <input id="fileInput" class="dropzone__input" type="file" accept="application/pdf,image/*">
+              <span id="fileName" class="dropzone__label">Select PDF or Image</span>
+              <span id="fileMeta" class="dropzone__meta">Supports up to 50MB artifacts</span>
+            </label>
+            <div class="input-group">
+              <input
+                id="fileTitleInput"
+                class="input-field"
+                type="text"
+                placeholder="Optional artifact title"
+                autocomplete="off"
+              >
+            </div>
+            <button id="uploadFileButton" class="btn btn--secondary" type="submit">
+              Sync Artifact
+            </button>
+          </form>
+        </section>
+      </div>
+
+      <footer class="footer">
+        <p id="status" class="status-indicator" data-state="idle">
+          Standing by...
         </p>
-      </div>
-
-      <button id="sessionActionButton" class="button button--ghost" type="button">
-        Checking session...
-      </button>
-    </header>
-
-    <section class="panel panel--session">
-      <div class="panel__header">
-        <div>
-          <p class="panel__eyebrow">Session</p>
-          <h2 id="sessionTitle" class="panel__title">Checking your login...</h2>
-        </div>
-        <span id="sessionBadge" class="badge" data-state="loading">Checking</span>
-      </div>
-      <p id="sessionDescription" class="panel__description">
-        We verify your web app session before enabling save actions.
-      </p>
-    </section>
-
-    <section class="panel">
-      <div class="panel__header panel__header--stacked">
-        <div>
-          <p class="panel__eyebrow">Current Page</p>
-          <h2 class="panel__title">Save what you are viewing now</h2>
-        </div>
-      </div>
-
-      <div class="page-preview">
-        <p id="activePageTitle" class="page-preview__title">Loading active tab...</p>
-        <p id="activePageUrl" class="page-preview__url">Checking the current page...</p>
-      </div>
-
-      <button id="saveCurrentPageButton" class="button button--primary" type="button">
-        Save Current Page
-      </button>
-    </section>
-
-    <section class="panel">
-      <div class="panel__header panel__header--stacked">
-        <div>
-          <p class="panel__eyebrow">Any Link</p>
-          <h2 class="panel__title">Paste another URL to save</h2>
-        </div>
-      </div>
-
-      <form id="linkForm" class="form-stack">
-        <label class="field">
-          <span class="field__label">Link URL</span>
-          <input
-            id="linkInput"
-            class="field__input"
-            type="url"
-            inputmode="url"
-            placeholder="Paste any article, YouTube, tweet, or resource URL"
-            autocomplete="off"
-          >
-        </label>
-
-        <button id="saveLinkButton" class="button button--secondary" type="submit">
-          Save Pasted Link
-        </button>
-      </form>
-    </section>
-
-    <section class="panel">
-      <div class="panel__header panel__header--stacked">
-        <div>
-          <p class="panel__eyebrow">Upload File</p>
-          <h2 class="panel__title">Add a PDF or image from your device</h2>
-        </div>
-      </div>
-
-      <form id="uploadForm" class="form-stack">
-        <label class="upload-dropzone" for="fileInput">
-          <input id="fileInput" class="upload-dropzone__input" type="file" accept="application/pdf,image/*">
-          <span id="fileName" class="upload-dropzone__title">Choose a PDF or image</span>
-          <span id="fileMeta" class="upload-dropzone__meta">The file will be uploaded, tagged, and added to your library.</span>
-        </label>
-
-        <label class="field">
-          <span class="field__label">Optional title</span>
-          <input
-            id="fileTitleInput"
-            class="field__input"
-            type="text"
-            placeholder="Give the upload a custom title if you want"
-            autocomplete="off"
-          >
-        </label>
-
-        <button id="uploadFileButton" class="button button--secondary" type="submit">
-          Upload File
-        </button>
-      </form>
-    </section>
-
-    <p id="status" class="status" data-state="idle" aria-live="polite">
-      Checking session...
-    </p>
+      </footer>
+    </div>
   </main>
-
   <script src="popup.js"></script>
 </body>
 </html>
