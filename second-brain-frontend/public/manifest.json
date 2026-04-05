@@ -1,6 +1,6 @@
 {
-  "short_name": "DataNest",
-  "name": "DataNest AI — Your AI-Powered Personal Knowledge System",
+  "short_name": "HumanBrain",
+  "name": "HumanBrain AI — Your AI-Powered Personal Knowledge System",
   "description": "The ultimate personal knowledge engine using AI, semantic search, and knowledge graphs to organize your digital notes and media.",
   "start_url": "/",
   "display": "standalone",

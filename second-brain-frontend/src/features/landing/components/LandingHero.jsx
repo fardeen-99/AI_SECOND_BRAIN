@@ -1,40 +1,45 @@
 import React, { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Play } from 'lucide-react';
+import { ArrowRight, Play, Sparkles } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useParallax } from '../../../hooks/useGsap';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// ─── Trust stats shown below the CTA ──────────────────────────────────────────
+const STATS = [
+  { value: '10k+', label: 'Notes indexed' },
+  { value: '< 200ms', label: 'Recall latency' },
+  { value: '99.9%', label: 'Uptime' },
+];
+
 const LandingHero = ({ graphImage }) => {
-  const headingRef = useRef(null);
-  const subHeadingRef = useRef(null);
-  const ctaRef = useRef(null);
-  const badgeRef = useRef(null);
-  const imageRef = useRef(null);
+  const headingRef        = useRef(null);
+  const subHeadingRef     = useRef(null);
+  const ctaRef            = useRef(null);
+  const badgeRef          = useRef(null);
+  const statsRef          = useRef(null);
+  const imageRef          = useRef(null);
   const imageContainerRef = useRef(null);
 
-  // Parallax on the hero image
-  useParallax(imageContainerRef, 60);
+  useParallax(imageContainerRef, 50);
 
   useEffect(() => {
     if (!headingRef.current) return;
 
     const ctx = gsap.context(() => {
-      // Badge reveal
+      // ── badge ──────────────────────────────────────────────────────────────
       gsap.fromTo(
         badgeRef.current,
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, delay: 0.2, ease: 'power3.out' }
+        { y: 16, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.7, delay: 0.15, ease: 'power3.out' }
       );
 
-      // Split-text heading reveal
-      const heading = headingRef.current;
-      const originalHTML = heading.innerHTML;
+      // ── heading character reveal ───────────────────────────────────────────
+      const heading     = headingRef.current;
       const textContent = heading.textContent;
-      const words = textContent.split(/(\s+)/);
-
+      const words       = textContent.split(/(\s+)/);
       heading.innerHTML = '';
 
       words.forEach((word) => {
@@ -42,53 +47,43 @@ const LandingHero = ({ graphImage }) => {
           heading.appendChild(document.createTextNode(' '));
           return;
         }
-
         const wordSpan = document.createElement('span');
-        wordSpan.style.display = 'inline-block';
-        wordSpan.style.overflow = 'hidden';
-        wordSpan.style.verticalAlign = 'top';
-
+        wordSpan.style.cssText = 'display:inline-block;overflow:hidden;vertical-align:top;';
         [...word].forEach((char) => {
           const charSpan = document.createElement('span');
           charSpan.textContent = char;
-          charSpan.style.display = 'inline-block';
-          charSpan.style.transform = 'translateY(120%)';
+          charSpan.style.cssText = 'display:inline-block;transform:translateY(115%);';
           charSpan.classList.add('hero-char');
           wordSpan.appendChild(charSpan);
         });
-
         heading.appendChild(wordSpan);
       });
 
-      const chars = heading.querySelectorAll('.hero-char');
-
-      gsap.to(chars, {
+      gsap.to(heading.querySelectorAll('.hero-char'), {
         y: 0,
-        duration: 0.8,
-        stagger: 0.025,
-        delay: 0.5,
+        duration: 0.75,
+        stagger: 0.018,
+        delay: 0.45,
         ease: 'power4.out',
       });
 
-      // Sub heading
+      // ── sub-heading + cta + stats ──────────────────────────────────────────
       gsap.fromTo(
-        subHeadingRef.current,
-        { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, delay: 1.2, ease: 'power3.out' }
+        [subHeadingRef.current, ctaRef.current, statsRef.current],
+        { y: 24, opacity: 0 },
+        {
+          y: 0, opacity: 1, duration: 0.75,
+          stagger: 0.15,
+          delay: 1.1,
+          ease: 'power3.out',
+        }
       );
 
-      // CTA buttons
-      gsap.fromTo(
-        ctaRef.current,
-        { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, delay: 1.5, ease: 'power3.out' }
-      );
-
-      // Hero image
+      // ── image ──────────────────────────────────────────────────────────────
       gsap.fromTo(
         imageRef.current,
-        { y: 80, opacity: 0, scale: 0.95 },
-        { y: 0, opacity: 1, scale: 1, duration: 1.4, delay: 0.8, ease: 'power3.out' }
+        { y: 70, opacity: 0, scale: 0.97 },
+        { y: 0, opacity: 1, scale: 1, duration: 1.3, delay: 0.7, ease: 'power3.out' }
       );
     });
 
@@ -96,83 +91,189 @@ const LandingHero = ({ graphImage }) => {
   }, []);
 
   return (
-    <section className="relative min-h-[140vh] md:min-h-[155vh] flex flex-col pt-32 md:pt-44 overflow-hidden">
-      {/* Hero Content — Asymmetric Editorial Layout */}
-      <div className="max-w-7xl mx-auto px-6 z-10 w-full">
+    <section className="relative flex flex-col pt-28 md:pt-40 pb-0 overflow-hidden">
+      {/*
+        ── Ambient background glow ─────────────────────────────────────────────
+        Subtle radial that references the existing ink/accent palette.
+        Kept very low opacity so it reads as atmosphere, not decoration.
+      */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 w-[900px] h-[600px] rounded-full opacity-[0.07] blur-3xl"
+        style={{ background: 'radial-gradient(ellipse at center, var(--color-accent, #a78bfa) 0%, transparent 70%)' }}
+      />
+
+      {/* ── Content ─────────────────────────────────────────────────────────── */}
+      <div className="max-w-7xl mx-auto px-6 md:px-10 z-10 w-full">
+
         {/* Badge */}
-        <div ref={badgeRef} className="opacity-0 mb-10">
-          <span className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-artifact fine-border text-accent text-[11px] font-semibold tracking-[0.2em] uppercase">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="animate-subtle-pulse absolute inline-flex h-full w-full rounded-full bg-accent"></span>
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-accent"></span>
-            </span>
-            Intelligence v2.0
+        <div ref={badgeRef} className="opacity-0 mb-8">
+          <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full fine-border text-accent text-[10px] font-semibold tracking-[0.18em] uppercase select-none">
+            <Sparkles className="w-3 h-3 opacity-80" />
+            Second Brain · v2.0
           </span>
         </div>
 
-        {/* Heading — Large Editorial Serif */}
+        {/*
+          ── Heading ───────────────────────────────────────────────────────────
+          Tighter, more intentional fluid scale.
+          clamp() gives smooth interpolation so no jumps between breakpoints.
+        */}
         <h1
           ref={headingRef}
-          className="font-serif text-5xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] font-black text-ivory leading-[1.02] tracking-[-0.03em] max-w-5xl"
+          className="font-serif font-black text-ivory leading-[1.04] tracking-[-0.035em]"
+          style={{ fontSize: 'clamp(2.75rem, 8vw, 6rem)' }}
         >
-          Your AI-Powered Second Brain
+          Your AI-Powered Second Human Brain
         </h1>
 
-        {/* Subheading — Clean sans-serif, muted */}
-        <p
-          ref={subHeadingRef}
-          className="opacity-0 mt-8 md:mt-10 text-lg md:text-xl text-ivory/50 max-w-xl font-medium leading-relaxed"
-        >
-          Capture everything. Recall everything instantly with semantic search and RAG chat. Your knowledge, architecturally organized.
-        </p>
+        {/*
+          ── Two-column layout on desktop ──────────────────────────────────────
+          Sub-heading sits left; CTA + stats anchor the bottom-right on large screens.
+          On mobile everything stacks naturally.
+        */}
+        <div className="mt-10 md:mt-12 flex flex-col md:flex-row md:items-end md:justify-between gap-10 md:gap-16">
 
-        {/* CTA — Editorial buttons */}
-        <div ref={ctaRef} className="opacity-0 mt-12 flex flex-col sm:flex-row items-start gap-5">
-          <Link
-            to="/register"
-            className="group relative px-8 py-4 rounded-artifact bg-ivory text-ink-950 font-bold text-base hover:bg-accent transition-all duration-300 shadow-artifact"
+          {/* Sub-heading */}
+          <p
+            ref={subHeadingRef}
+            className="opacity-0 text-base md:text-lg text-ivory/50 max-w-md font-medium leading-[1.75]"
           >
-            <span className="relative z-10 flex items-center gap-2">
-              Get Started
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-            </span>
-          </Link>
-          <a
-            href="https://drive.google.com/file/d/1YCjMkUpOn7zer00S5bwIJq7vqMG4NuOO/view?usp=sharing"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group px-8 py-4 rounded-artifact fine-border text-ivory/70 font-semibold text-base hover:text-ivory hover:border-ivory/20 transition-all duration-300 flex items-center gap-3"
-          >
-            <div className="w-8 h-8 rounded-full fine-border flex items-center justify-center group-hover:bg-accent group-hover:border-accent group-hover:text-ink-950 transition-all duration-300">
-              <Play className="w-3 h-3 fill-current ml-0.5" />
+          Capture everything. Instantly retrieve insights with semantic search and RAG chat — your knowledge, intelligently structured.
+          </p>
+
+          {/* CTA group */}
+          <div ref={ctaRef} className="opacity-0 flex flex-col gap-8 shrink-0">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+
+              {/* Primary CTA */}
+              <Link
+                to="/register"
+                className="
+                  group relative inline-flex items-center gap-2.5
+                  px-7 py-3.5 rounded-artifact
+                  bg-ivory text-ink-950
+                  text-sm font-bold tracking-tight
+                  transition-all duration-200
+                  hover:bg-accent hover:text-white
+                  shadow-artifact focus-visible:outline-none
+                  focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2
+                  focus-visible:ring-offset-ink-950
+                "
+              >
+                Get Started Free
+                <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+              </Link>
+
+              {/* Ghost CTA — simplified; the play icon speaks for itself */}
+              <a
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="
+                  group inline-flex items-center gap-2.5
+                  px-7 py-3.5 rounded-artifact
+                  fine-border
+                  text-ivory/60 text-sm font-semibold
+                  transition-all duration-200
+                  hover:text-ivory hover:border-ivory/25
+                  focus-visible:outline-none
+                  focus-visible:ring-2 focus-visible:ring-ivory/30 focus-visible:ring-offset-2
+                  focus-visible:ring-offset-ink-950
+                "
+              >
+                <span
+                  className="
+                    inline-flex items-center justify-center
+                    w-6 h-6 rounded-full
+                    fine-border
+                    transition-all duration-200
+                    group-hover:bg-accent group-hover:border-accent group-hover:text-white
+                  "
+                  aria-hidden="true"
+                >
+                  <Play className="w-2.5 h-2.5 fill-current ml-px" />
+                </span>
+                Watch Demo
+              </a>
             </div>
-            Watch Demo
-          </a>
+          </div>
+        </div>
+
+        {/* Trust stats — thin divider line above */}
+        <div
+          ref={statsRef}
+          className="opacity-0 mt-12 pt-8 border-t border-ivory/[0.07] flex flex-wrap gap-x-10 gap-y-4"
+        >
+          {STATS.map(({ value, label }) => (
+            <div key={label} className="flex flex-col gap-0.5">
+              <span className="text-ivory text-sm font-bold tracking-tight tabular-nums">
+                {value}
+              </span>
+              <span className="text-ivory/35 text-[11px] font-medium tracking-wide uppercase">
+                {label}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Hero Graph Image — with parallax */}
+      {/*
+        ── Hero image ────────────────────────────────────────────────────────────
+        Full-bleed up to max-width. Height uses aspect-ratio so it scales
+        correctly on every viewport without magic px values.
+      */}
       <div
         ref={imageContainerRef}
-        className="relative mt-20 md:mt-32 w-full max-w-[1400px] mx-auto px-6"
+        className="relative mt-16 md:mt-24 w-full max-w-[1400px] mx-auto px-4 md:px-8"
       >
-        <div
+        <figure
           ref={imageRef}
-          className="opacity-0 relative w-full h-[400px] md:h-[700px] rounded-artifact-xl overflow-hidden fine-border shadow-deep group cursor-zoom-in"
+          className="
+            opacity-0 relative w-full overflow-hidden
+            rounded-t-[20px] md:rounded-t-[28px]
+            fine-border border-b-0
+            shadow-deep
+            group cursor-zoom-in
+          "
+          style={{ aspectRatio: '16 / 8' }}
         >
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-ink-950 via-transparent to-transparent z-10 opacity-70" />
+          {/*
+            Gradient: lighter at the bottom so the image fades cleanly
+            into the next section rather than abruptly cropping.
+          */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 z-10 pointer-events-none"
+            style={{
+              background:
+                'linear-gradient(to bottom, transparent 55%, var(--color-ink-950, #0a0a0a) 100%)',
+            }}
+          />
 
           <img
             src={graphImage}
             alt="Second Brain — Knowledge Graph Visualization"
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+            className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.025]"
           />
 
-          {/* Fine corner accent lines */}
-          <div className="absolute top-4 left-4 w-8 h-8 border-t border-l border-ivory/10 rounded-tl-sm z-20" />
-          <div className="absolute bottom-4 right-4 w-8 h-8 border-b border-r border-ivory/10 rounded-br-sm z-20" />
-        </div>
+          {/*
+            Subtle inner glow along the top edge — gives the image a
+            "floating panel" feel consistent with the app aesthetic.
+          */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-x-0 top-0 h-px z-20"
+            style={{
+              background:
+                'linear-gradient(to right, transparent, rgba(255,255,255,0.08) 40%, rgba(255,255,255,0.08) 60%, transparent)',
+            }}
+          />
+
+          {/* Corner accents — increased contrast */}
+          <div aria-hidden="true" className="absolute top-5 left-5 w-6 h-6 border-t border-l border-ivory/20 rounded-tl-sm z-20" />
+          <div aria-hidden="true" className="absolute top-5 right-5 w-6 h-6 border-t border-r border-ivory/20 rounded-tr-sm z-20" />
+        </figure>
       </div>
     </section>
   );

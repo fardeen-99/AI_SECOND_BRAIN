@@ -1,101 +1,235 @@
 import React from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Search, MessageSquare, Workflow, LayoutGrid, Globe, Zap, Menu, X, ArrowRight, Twitter, Github, Linkedin, Slack } from 'lucide-react';
+import { Zap, Twitter, Github, Linkedin, ArrowUpRight } from 'lucide-react';
 
+// ─── Data ──────────────────────────────────────────────────────────────────────
+const footerLinks = [
+  {
+    title: 'Product',
+    links: [
+      { name: 'Features',   href: '#features' },
+      { name: 'Case Study', href: '#cases' },
+      { name: 'Changelog',  href: '#' },
+      { name: 'Pricing',    href: '#' },
+    ],
+  },
+  {
+    title: 'Developer',
+    links: [
+      { name: 'GitHub',    href: '#', external: true },
+      { name: 'API Docs',  href: '#' },
+      { name: 'Status',    href: '#', external: true },
+      { name: 'Discord',   href: '#', external: true },
+    ],
+  },
+  {
+    title: 'Company',
+    links: [
+      { name: 'About',           href: '#' },
+      { name: 'Privacy Policy',  href: '#' },
+      { name: 'Terms of Service',href: '#' },
+      { name: 'Security',        href: '#' },
+    ],
+  },
+];
+
+const socials = [
+  { icon: Twitter,  href: '#', label: 'Twitter / X' },
+  { icon: Github,   href: '#', label: 'GitHub' },
+  { icon: Linkedin, href: '#', label: 'LinkedIn' },
+];
+
+// ─── Shared easing ─────────────────────────────────────────────────────────────
+const EASE = [0.22, 1, 0.36, 1];
+
+// ─── Component ────────────────────────────────────────────────────────────────
 const LandingFooter = () => {
   const currentYear = new Date().getFullYear();
 
-  const footerLinks = [
-    {
-      title: 'PRODUCT',
-      links: [
-        { name: 'Features', href: '#features' },
-        { name: 'Case Study', href: '#cases' },
-        { name: 'Changelog', href: '#' },
-        { name: 'Pricing', href: '#' },
-      ]
-    },
-    {
-      title: 'DEVELOPER',
-      links: [
-        { name: 'GitHub', href: '#' },
-        { name: 'API Docs', href: '#' },
-        { name: 'Status', href: '#' },
-        { name: 'Discord', href: '#' },
-      ]
-    },
-    {
-      title: 'COMPANY',
-      links: [
-        { name: 'About Us', href: '#' },
-        { name: 'Privacy Policy', href: '#' },
-        { name: 'Terms of Service', href: '#' },
-        { name: 'Security', href: '#' },
-      ]
-    }
-  ];
-
   return (
-    <footer className="bg-obsidian-950 px-6 py-20 border-t border-obsidian-900 overflow-hidden relative">
-      <div className="absolute top-0 right-0 w-1/4 h-1/4 bg-accent/5 blur-[120px] rounded-full pointer-events-none -z-10" />
+    <footer className="relative bg-obsidian-950 overflow-hidden">
 
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between gap-16 lg:gap-24 relative z-10">
+      {/*
+        ── Atmosphere ────────────────────────────────────────────────────────────
+        Mirrors the CTA section glow so the page closes with the same warmth
+        it opened with — a subtle visual bookend.
+      */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div
+          className="absolute -bottom-32 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full opacity-[0.06] blur-[80px]"
+          style={{ background: 'var(--color-accent, #a78bfa)' }}
+        />
+      </div>
 
-        {/* Brand Column */}
-        <div className="flex-1 max-w-sm">
-          <Link to="/" className="flex items-center gap-2 mb-8 group">
-            <div className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center -rotate-6 group-hover:rotate-0 transition-transform duration-300">
-              <Zap className="w-6 h-6 text-obsidian-950 fill-obsidian-950" />
+      {/* ── Main footer body ─────────────────────────────────────────────────── */}
+      <div className="relative max-w-7xl mx-auto px-6 md:px-10 pt-20 pb-12">
+
+        {/*
+          ── Top row: brand + nav columns ──────────────────────────────────────
+          Brand takes ~35% on desktop; nav columns fill the rest.
+          On mobile they stack with brand always first.
+        */}
+        <div className="flex flex-col lg:flex-row gap-16 lg:gap-20 pb-16 border-b border-ivory/[0.06]">
+
+          {/* Brand column */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: EASE }}
+            className="lg:w-[320px] shrink-0 flex flex-col"
+          >
+            {/* Wordmark */}
+            <Link
+              to="/"
+              className="group inline-flex items-center gap-2.5 mb-6 w-fit"
+              aria-label="Second Brain — home"
+            >
+              <div
+                className="
+                  w-8 h-8 rounded-artifact flex items-center justify-center
+                  bg-accent/10 text-accent
+                  group-hover:bg-accent group-hover:text-ink-950
+                  transition-all duration-200
+                "
+              >
+                <Zap className="w-4 h-4 fill-current" />
+              </div>
+              <span className="font-serif font-black text-ivory text-lg tracking-tight">
+                Human Brain
+              </span>
+            </Link>
+
+            {/* Tagline */}
+            <p className="text-ivory/35 text-sm leading-[1.75] mb-8 max-w-[28ch]">
+              Your AI-powered knowledge system. Capture everything,
+              recall anything, connect the dots automatically.
+            </p>
+
+            {/* Social icons */}
+            <div className="flex items-center gap-3 mt-auto">
+              {socials.map(({ icon: Icon, href, label }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="
+                    w-8 h-8 rounded-artifact flex items-center justify-center
+                    fine-border text-ivory/30
+                    hover:text-ivory hover:border-ivory/20
+                    transition-all duration-200
+                  "
+                >
+                  <Icon className="w-3.5 h-3.5" strokeWidth={1.5} />
+                </a>
+              ))}
             </div>
-            <span className="text-2xl font-extrabold tracking-tight text-white">
-              DataNest <span className="text-accent underline decoration-accent/20">AI</span>
-            </span>
-          </Link>
-          <p className="text-obsidian-400 font-medium leading-relaxed mb-10">
-            Unified for intelligence. Your digital second brain for ideas, simplified by AI. Captures focus, maximizes clarity.
-          </p>
-          <div className="flex items-center gap-6">
-            <a href="https://x.com/maty_ritam" target="_blank" className="text-obsidian-400 hover:text-accent transition-colors"><Twitter className="w-5 h-5" /></a>
-            <a href="https://github.com/ritam-g" target="_blank" className="text-obsidian-400 hover:text-accent transition-colors"><Github className="w-5 h-5" /></a>
-            <a href="https://www.linkedin.com/in/ritammaty/" target="_blank" className="text-obsidian-400 hover:text-accent transition-colors"><Linkedin className="w-5 h-5" /></a>
-            <a href="#" className="text-obsidian-400 hover:text-accent transition-colors"><Slack className="w-5 h-5" /></a>
+          </motion.div>
+
+          {/* Nav columns */}
+          <div className="flex-1 grid grid-cols-2 md:grid-cols-3 gap-10 md:gap-12">
+            {footerLinks.map((section, si) => (
+              <motion.div
+                key={section.title}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.55, delay: si * 0.08, ease: EASE }}
+              >
+                {/* Column heading — sentence case, not all-caps screaming */}
+                <p className="text-ivory/25 text-[10px] font-semibold tracking-[0.18em] uppercase mb-5">
+                  {section.title}
+                </p>
+
+                <ul className="space-y-3">
+                  {section.links.map((link) => (
+                    <li key={link.name}>
+                      <a
+                        href={link.href}
+                        target={link.external ? '_blank' : undefined}
+                        rel={link.external ? 'noopener noreferrer' : undefined}
+                        className="
+                          group inline-flex items-center gap-1
+                          text-ivory/45 hover:text-ivory
+                          text-sm font-medium
+                          transition-colors duration-200
+                        "
+                      >
+                        {link.name}
+                        {link.external && (
+                          <ArrowUpRight
+                            className="w-3 h-3 opacity-0 -translate-y-0.5 translate-x-0.5 group-hover:opacity-60 transition-all duration-200"
+                            aria-hidden="true"
+                          />
+                        )}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            ))}
           </div>
         </div>
 
-        {/* Links Columns */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-12 flex-[1.5]">
-          {footerLinks.map((section) => (
-            <div key={section.title}>
-              <h5 className="text-white font-black text-sm tracking-widest uppercase mb-8">{section.title}</h5>
-              <ul className="space-y-4">
-                {section.links.map((link) => (
-                  <li key={link.name}>
-                    <a
-                      href={link.href}
-                      className="text-obsidian-400 hover:text-accent font-medium text-lg transition-colors duration-300"
-                    >
-                      {link.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+        {/*
+          ── Bottom bar ────────────────────────────────────────────────────────
+          Copyright left, legal links right.
+          Both use identical weight/size — no faux hierarchy in legal copy.
+        */}
+        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-ivory/20 text-xs font-medium order-2 md:order-1">
+            © {currentYear} DataNest AI Inc. All rights reserved.
+          </p>
+
+          <div className="flex items-center gap-1 order-1 md:order-2">
+            {['Privacy', 'Terms', 'Cookies'].map((label, i, arr) => (
+              <React.Fragment key={label}>
+                <a
+                  href="#"
+                  className="text-ivory/20 hover:text-ivory/50 text-xs font-medium px-2.5 py-1 transition-colors duration-200"
+                >
+                  {label}
+                </a>
+                {i < arr.length - 1 && (
+                  <span aria-hidden="true" className="text-ivory/10 text-xs select-none">·</span>
+                )}
+              </React.Fragment>
+            ))}
+          </div>
         </div>
 
       </div>
 
-      <div className="max-w-7xl mx-auto mt-24 pt-8 border-t border-obsidian-900 flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
-        <p className="text-obsidian-500 font-bold uppercase tracking-widest text-xs">
-          © {currentYear} DataNest AI Inc. All Rights Reserved.
-        </p>
-        <p className="text-obsidian-500 font-bold uppercase tracking-widest text-xs flex items-center gap-4">
-          <span className="hover:text-accent cursor-pointer transition-colors px-2 py-1">Privacy</span>
-          <span className="hover:text-accent cursor-pointer transition-colors px-2 py-1">Terms</span>
-          <span className="hover:text-accent cursor-pointer transition-colors px-2 py-1">Cookies</span>
-        </p>
+      {/*
+        ── Wordmark watermark ─────────────────────────────────────────────────
+        Large, extremely faint letterform fills the bottom of the page —
+        gives the footer a sense of visual terminus without adding noise.
+        Purely decorative, hidden from screen readers.
+      */}
+      <div
+        aria-hidden="true"
+        className="
+          relative overflow-hidden h-25 md:h-34          flex items-end justify-center
+          select-none pointer-events-none
+        "
+      >
+        <span
+          className="
+            font-serif font-black text-ivory
+            leading-none tracking-[-0.05em]
+          
+            opacity-[0.025]
+            whitespace-nowrap
+          "
+          style={{ fontSize: 'clamp(4rem, 14vw, 10rem)' }}
+        >
+          Second Brain
+        </span>
       </div>
+
     </footer>
   );
 };

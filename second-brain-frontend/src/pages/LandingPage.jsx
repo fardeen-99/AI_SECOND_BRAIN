@@ -12,12 +12,7 @@ import LandingSidekick from '../features/landing/components/LandingSidekick';
 import LandingCTA from '../features/landing/components/LandingCTA';
 import LandingFooter from '../features/landing/components/LandingFooter';
 
-// Assets
-import heroGraph from '../assets/landing/hero_graph_visualization.png';
-import commandCenter from '../assets/landing/command_center_mobile_mockup.png';
-import neuralDesign from '../assets/landing/neural_design_abstract.png';
-import ragInterface from '../assets/landing/rag_interface_mockup_desktop_slim.png';
-import sidekickImg from '../assets/landing/omnipresent_sidekick_browser_overlay.png';
+
 
 const LandingPage = () => {
   useEffect(() => {
@@ -50,15 +45,15 @@ const LandingPage = () => {
       <LandingNavbar />
       
       <main>
-        <LandingHero graphImage={heroGraph} />
+        <LandingHero graphImage={"https://wallpapercave.com/wp/wp6690976.jpg"} />
         <LandingFeatures />
         <LandingPipeline />
         <LandingCaseStudy 
-          commandCenterImg={commandCenter} 
-          neuralImg={neuralDesign} 
-          ragImg={ragInterface} 
+          commandCenterImg={"https://blogs-cdn.imagine.art/ai_image_generator_hero_image_57699a1f24.png"} 
+          neuralImg={"https://www.nextechar.com/hubfs/output%20%287%29-1.jpg"} 
+          ragImg={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKexnUwRC8NU_gD_ClTyW7k1ncK629TP6GNQ&s"} 
         />
-        <LandingSidekick sidekickImg={sidekickImg} />
+        <LandingSidekick sidekickImg={"https://www.lucrative.ai/wp-content/uploads/2021/03/Shopify-fb-google-sales-1024x624.jpg"} />
         <LandingCTA />
       </main>
 
