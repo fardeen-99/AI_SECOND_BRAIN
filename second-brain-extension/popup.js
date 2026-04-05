@@ -1,6 +1,6 @@
-const DEFAULT_API_BASE_URL = 'http://localhost:3000/api';
-const DEFAULT_FRONTEND_BASE_URL = 'http://localhost:5173';
-const RENDER_API_BASE_URL = 'https://datanest-ai.onrender.com/api';
+const DEFAULT_API_BASE_URL = 'https://ai-second-brain-stz4.onrender.com/api';
+const DEFAULT_FRONTEND_BASE_URL = 'https://ai-second-brain-stz4.onrender.com';
+const RENDER_API_BASE_URL = 'https://ai-second-brain-stz4.onrender.com/api';
 const AUTH_COOKIE_NAME = 'jwtToken';
 const SAVE_ENDPOINT = '/content/save';
 const UPLOAD_ENDPOINT = '/content/upload';
@@ -469,7 +469,7 @@ function updateSessionPanel(sessionState, overrides = {}) {
   }
 
   if (sessionState.networkError) {
-    sessionTitle.innerHTML = `<a href="https://datanest-ai.onrender.com/login" target="_blank">Unable to verify the server right now click</a>`;
+    sessionTitle.innerHTML = `<a href="https://ai-second-brain-stz4.onrender.com/login" target="_blank">Unable to verify the server right now click</a>`;
     sessionDescription.textContent = 'The popup cannot reach your backend at the moment. Retry the session check after your server is running again.';
     sessionBadge.dataset.state = 'error';
     sessionBadge.textContent = 'Offline';
