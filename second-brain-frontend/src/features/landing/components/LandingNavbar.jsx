@@ -145,7 +145,7 @@ const LandingNavbar = () => {
 
               {/* Wordmark */}
               <span className="font-serif font-black text-ivory text-[1.05rem] tracking-[-0.02em] leading-none">
-                Second
+                Human
                 <span className="text-accent ml-1">Brain</span>
               </span>
             </Link>
